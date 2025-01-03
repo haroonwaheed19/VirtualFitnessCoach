@@ -110,4 +110,16 @@ public class User {
     {
         progress.add(activity + " - " + caloriesBurned + " Calories Burned.");
     }
+
+    public void printInfo()
+    {
+        System.out.println("Name : " + name);
+        System.out.println("Id : " + id);
+        System.out.println("email : " + email);
+        System.out.println("fitness goal : " + fitnessGoal);
+        System.out.println("age : " + age);
+        System.out.println("weight : " + weight + " kg");
+        System.out.println("height : " + height + " feet");
+
+    }
 }
