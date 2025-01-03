@@ -108,6 +108,6 @@ public class User {
 
     public void logProgress(String activity, double caloriesBurned)
     {
-        progress.add(activity + " -- " + caloriesBurned + " Calories Burned.");
+        progress.add(activity + " - " + caloriesBurned + " Calories Burned.");
     }
 }
