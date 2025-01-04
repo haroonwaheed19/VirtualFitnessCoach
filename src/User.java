@@ -2,21 +2,53 @@ import java.util.*;
 import java.util.ArrayList;
 
 public class User {
-    String id, name, email,password,fitnessGoal;
-    int age;
-    double weight, height;
-    List<String> progress = new ArrayList<>();
+    private String id, name, email, password, fitnessGoal;
+    private int age;
+    private double weight, height;
+    private List<String> progress = new ArrayList<>();
 
-    public User(String id, String name, String email, String password, String fitnessGoal, int age, double weight, double height)
-    {
+    public User(String id, String name, String email, String password, String fitnessGoal, int age, double weight, double height) {
+        if (!isValidAge(age) || !isValidWeight(weight) || !isValidHeight(height)) {
+            throw new IllegalArgumentException("Invalid input values for User attributes.");
+        }
         this.id = id;
         this.name = name;
         this.email = email;
-        this.password = password;
+        this.password = encryptPassword(password);
         this.age = age;
         this.weight = weight;
         this.height = height;
         this.fitnessGoal = fitnessGoal;
+    }
+
+    private boolean isValidAge(int age) {
+        return age > 0;
+    }
+
+    private boolean isValidWeight(double weight) {
+        return weight > 0;
+    }
+
+    private boolean isValidHeight(double height) {
+        return height > 0;
+    }
+
+    private String encryptPassword(String password) {
+        return password.hashCode() + ""; // Simple encryption (not for production)
+    }
+
+    public void logProgress(String activity, double caloriesBurned) {
+        progress.add(new Date() + ": " + activity + " - " + caloriesBurned + " Calories Burned.");
+    }
+
+    public void printInfo() {
+        System.out.println("Name : " + name);
+        System.out.println("Id : " + id);
+        System.out.println("Email : " + email);
+        System.out.println("Fitness Goal : " + fitnessGoal);
+        System.out.println("Age : " + age);
+        System.out.println("Weight : " + weight + " kg");
+        System.out.println("Height : " + height + " m");
     }
 
     //Setters
@@ -96,7 +128,7 @@ public class User {
 
     public void updateProfile(String id, String name, String email, String password, String fitnessGoal, int age, double weight, double height)
     {
-        this.id = id;
+        this.id = id.toLowerCase();
         this.name = name;
         this.email = email;
         this.password = password;
@@ -106,20 +138,4 @@ public class User {
         this.fitnessGoal = fitnessGoal;
     }
 
-    public void logProgress(String activity, double caloriesBurned)
-    {
-        progress.add(activity + " - " + caloriesBurned + " Calories Burned.");
-    }
-
-    public void printInfo()
-    {
-        System.out.println("Name : " + name);
-        System.out.println("Id : " + id);
-        System.out.println("email : " + email);
-        System.out.println("fitness goal : " + fitnessGoal);
-        System.out.println("age : " + age);
-        System.out.println("weight : " + weight + " kg");
-        System.out.println("height : " + height + " feet");
-
-    }
 }
