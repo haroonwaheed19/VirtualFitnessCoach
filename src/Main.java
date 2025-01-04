@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Main {
     public static void main(String[] args) {
         // Admin and Users
@@ -46,5 +48,23 @@ public class Main {
         // View user progress
         System.out.println("\nUser Progress:");
         System.out.println(u1.getProgress());
+
+
+        Meal ketoMeal = MealFactory.createMeal("keto", 1, "Keto Salad", Arrays.asList("Avocado", "Cheese", "Lettuce"), 400);
+        Meal veganMeal = MealFactory.createMeal("vegan", 2, "Vegan Buddha Bowl", Arrays.asList("Quinoa", "Tofu", "Veggies"), 350);
+        Meal vegetarianMeal = MealFactory.createMeal("vegetarian", 3, "Vegetarian Pasta", Arrays.asList("Pasta", "Tomatoes", "Basil"), 500);
+        Meal balancedMeal = MealFactory.createMeal("balanced", 4, "Balanced Meal", Arrays.asList("Chicken", "Brown Rice", "Broccoli"), 600);
+
+        // Displaying nutritional information
+        System.out.println(ketoMeal.getNutritionalInfo());
+        System.out.println(veganMeal.getNutritionalInfo());
+        System.out.println(vegetarianMeal.getNutritionalInfo());
+        System.out.println(balancedMeal.getNutritionalInfo());
+
+        // Preparing the meals
+        ketoMeal.prepareMeal();
+        veganMeal.prepareMeal();
+        vegetarianMeal.prepareMeal();
+        balancedMeal.prepareMeal();
     }
 }
