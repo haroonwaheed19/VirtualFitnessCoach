@@ -147,8 +147,39 @@ public class Admin {
     // Method to upload exercises
     public void uploadExercises(Exercise exercise) {
         synchronized (exerciseList) {
-            exerciseList.add(exercise);
-            System.out.println("Exercise uploaded: " + exercise.getName());
+            boolean exists = exerciseList.stream().anyMatch(e -> e.getId() == exercise.getId());
+            if (!exists) {
+                exerciseList.add(exercise);
+                System.out.println("Exercise uploaded: " + exercise.getName());
+            } else {
+                System.out.println("Exercise with ID " + exercise.getId() + " already exists.");
+            }
+        }
+    }
+
+    // View exercises
+    public void viewExercises() {
+        synchronized (exerciseList) {
+            System.out.println("\n--- Exercise List ---");
+            if (exerciseList.isEmpty()) {
+                System.out.println("No exercises available.");
+            } else {
+                for (Exercise exercise : exerciseList) {
+                    System.out.println(exercise.getExerciseDetails());
+                }
+            }
+        }
+    }
+
+    // Find exercise by ID
+    public Exercise findExerciseById(int id) {
+        synchronized (exerciseList) {
+            for (Exercise exercise : exerciseList) {
+                if (exercise.getId() == id) {
+                    return exercise;
+                }
+            }
+            return null; // Return null if not found
         }
     }
 

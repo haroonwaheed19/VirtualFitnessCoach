@@ -12,24 +12,38 @@ public class Main {
         // Testing Exercise Functionality
         System.out.println("\n--- Testing Exercise Functionality ---");
 
-        // Creating a CardioExercise
-        Exercise cardio = new CardioExercise(1, "Running", 8.5, false); // 8.5 calories burned per minute, no equipment
+        // Adding Exercises
+        System.out.println("\n--- Adding Exercises ---");
+        Exercise running = new CardioExercise(1, "Running", 8.5, false);
+        Exercise cycling = new CardioExercise(2, "Cycling", 7.0, false);
+        Exercise swimming = new CardioExercise(3, "Swimming", 9.0, true);
 
-        // Print exercise details
-        System.out.println(cardio.getExerciseDetails());
+        a1.uploadExercises(running);
+        a1.uploadExercises(cycling);
+        a1.uploadExercises(swimming);
+        a1.uploadExercises(running); // Duplicate upload
 
-        // Perform the exercise
-        cardio.performExercise();
+        // View exercises
+        a1.viewExercises();
 
-        // Calculate calories burned
-        int duration = 30; // 30 minutes of exercise
-        double caloriesBurned = cardio.calculateCaloriesBurned(duration);
-        System.out.println("Calories burned in " + duration + " minutes: " + caloriesBurned);
+        // Testing Exercise
+        System.out.println("\n--- Testing an Exercise ---");
+        Exercise exerciseToTest = a1.findExerciseById(1); // Find exercise by ID
 
-        // Log progress for user u1
-        u1.logProgress("Running", caloriesBurned);
 
-        // View progress
+        if (exerciseToTest != null) {
+            exerciseToTest.performExercise();
+            int duration = 30; // 30 minutes
+            double caloriesBurned = exerciseToTest.calculateCaloriesBurned(duration);
+            System.out.println("Calories burned in " + duration + " minutes: " + caloriesBurned);
+
+            // Log progress for user
+            u1.logProgress(exerciseToTest.getName(), caloriesBurned);
+        } else {
+            System.out.println("Exercise not found.");
+        }
+
+        // View user progress
         System.out.println("\nUser Progress:");
         System.out.println(u1.getProgress());
     }
