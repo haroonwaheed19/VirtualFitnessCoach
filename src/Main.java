@@ -14,9 +14,9 @@ public class Main {
 
         // Adding Exercises
         System.out.println("\n--- Adding Exercises ---");
-        Exercise running = new CardioExercise(1, "Running", 8.5, false);
-        Exercise cycling = new CardioExercise(2, "Cycling", 7.0, false);
-        Exercise swimming = new CardioExercise(3, "Swimming", 9.0, true);
+        Exercise running = ExerciseFactory.createExercise("cardio",1, "Running", 8.5, false);
+        Exercise cycling = ExerciseFactory.createExercise("cardio",2, "Cycling", 7.0, false);
+        Exercise swimming = ExerciseFactory.createExercise("cardio",3, "Swimming", 9.0, true);
 
         a1.uploadExercises(running);
         a1.uploadExercises(cycling);
