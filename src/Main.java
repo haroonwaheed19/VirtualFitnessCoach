@@ -11,6 +11,7 @@ public class Main {
         User u3 = new User("F2022065259", "Malaika", "malaika@gmail.com", "testing", "General Fitness", 19, 55.5, 5.50);
         admin.addUser(u1);
         admin.addUser(u2);
+        admin.addUser(u3);
 
         // Adding Exercises
         Exercise running = ExerciseFactory.createExercise("cardio", 1, "Running", 8.5, false);
