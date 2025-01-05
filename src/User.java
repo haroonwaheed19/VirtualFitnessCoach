@@ -14,7 +14,7 @@ public class User {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.password = encryptPassword(password);
+        this.password = password;
         this.age = age;
         this.weight = weight;
         this.height = height;
@@ -48,7 +48,7 @@ public class User {
         System.out.println("Fitness Goal : " + fitnessGoal);
         System.out.println("Age : " + age);
         System.out.println("Weight : " + weight + " kg");
-        System.out.println("Height : " + height + " m");
+        System.out.println("Height : " + height + " feets");
     }
 
     //Setters
@@ -136,6 +136,11 @@ public class User {
         this.weight = weight;
         this.height = height;
         this.fitnessGoal = fitnessGoal;
+    }
+
+    public String getUserDetails()
+    {
+        return "Name : " + name + " Id : " + id + " Fitness Goal : " + fitnessGoal + " Age : " + age + " Height : " + height + " ft Weight : " + weight + " Kg";
     }
 
 }
