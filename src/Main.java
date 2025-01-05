@@ -8,6 +8,7 @@ public class Main {
         Admin admin = Admin.getInstance("F2022065033", "Haroon Waheed", "haroonwaheed002@gmail.com");
         User u1 = new User("F2022065033", "Haroon Waheed", "haroonwaheed002@gmail.com", "testing", "WeightLoss", 20, 72.80, 5.80);
         User u2 = new User("F2022065362", "Maryam Habib", "maryamhabib@gmail.com", "testing", "General Fitness", 19, 55.5, 5.80);
+        User u3 = new User("F2022065259", "Malaika", "malaika@gmail.com", "testing", "General Fitness", 19, 55.5, 5.50);
         admin.addUser(u1);
         admin.addUser(u2);
 
