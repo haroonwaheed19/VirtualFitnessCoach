@@ -33,10 +33,6 @@ public class User {
         return height > 0;
     }
 
-    private String encryptPassword(String password) {
-        return password.hashCode() + ""; // Simple encryption (not for production)
-    }
-
     public void logProgress(String activity, double caloriesBurned) {
         progress.add(new Date() + ": " + activity + " - " + caloriesBurned + " Calories Burned.");
     }
