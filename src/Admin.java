@@ -80,6 +80,10 @@ public class Admin {
         return users;
     }
 
+    public List<WorkoutPlan> getWorkoutPlans() {
+        return workoutPlans;
+    }
+
     public User getUserById(String id){
         for (User existingUser : users) {
             // Compare IDs in a case-insensitive manner without modifying the original data

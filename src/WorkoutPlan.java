@@ -39,6 +39,7 @@ public class WorkoutPlan {
     }
 
     public void displayPlan() {
+        System.out.println("---------------------------------------------------------------------------");
         System.out.println("Workout Plan ID: " + id);
         System.out.println("Goal: " + goal);
         System.out.println("Duration: " + duration + " weeks");
@@ -46,6 +47,7 @@ public class WorkoutPlan {
         for (String exercise : exercises) {
             System.out.println(" - " + exercise);
         }
+        System.out.println("---------------------------------------------------------------------------");
     }
 
 

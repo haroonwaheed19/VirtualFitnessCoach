@@ -58,10 +58,14 @@ public class NutritionPlan {
         if (meals == null || meals.isEmpty()) {
             System.out.println("No meals available in this nutrition plan.");
         } else {
+            System.out.println("---------------------------------------------------------------------------");
+            System.out.println("Nutritional Plan Id : " + getId());
             System.out.println("Nutrition Plan (Diet: " + dietType + ", Total Calories: " + calories + "):");
             for (Meal meal : meals) {
                 System.out.println(" - " + meal.getName() + ": " + meal.getNutritionalInfo());
+                System.out.println("---------------------------------------------------------------------------");
             }
+
         }
     }
 }

@@ -139,29 +139,54 @@ public class Main {
     }
 
     public static void userMenu(Scanner scanner, Admin admin) {
-        User user = login(scanner, admin);
-
+        User user = login(scanner, admin); // User login
         int choice;
         do {
             System.out.println("\nUser Menu:");
             System.out.println("1. View Profile");
             System.out.println("2. Update Profile");
-            System.out.println("3. Log Progress");
-            System.out.println("4. View Progress");
-            System.out.println("5. Exit");
+            System.out.println("3. View Workout Plan");
+            System.out.println("4. Log Workout Progress");
+            System.out.println("5. View Nutritional Plan");
+            System.out.println("6. Log Nutritional Progress");
+            System.out.println("7. Exit");
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
 
             switch (choice) {
                 case 1 -> viewProfile(user);
                 case 2 -> updateProfile(scanner, user);
-                case 3 -> logProgress(scanner, user);
-                case 4 -> viewProgress(scanner, user);
-                case 5 -> System.out.println("Exiting User Menu...");
+                case 3 -> admin.listWorkoutPlans();
+                case 4 -> logWorkoutProgress(scanner, user,admin);
+                case 5 -> admin.listNutritionPlans();
+                case 6 -> logNutritionalProgress(scanner, user,admin);
+                case 7 -> System.out.println("Exiting User Menu...");
                 default -> System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != 5);
+        } while (choice != 7);
     }
+
+    public static void logNutritionalProgress(Scanner scanner, User user, Admin admin) {
+
+        System.out.println("\nAvailable Nutritional Plans:");
+        admin.listNutritionPlans();
+
+        // Log the nutritional progress
+        System.out.println("\nLog Nutritional Progress:");
+        System.out.print("Enter the Nutrition Plan ID you followed: ");
+        scanner.nextLine();
+        String nutritionPlanId = scanner.nextLine();
+        System.out.print("Enter the name of the food item consumed: ");
+        String foodItem = scanner.nextLine();
+        System.out.print("Enter the calories consumed: ");
+        double caloriesConsumed = scanner.nextDouble();
+
+        // Log the progress for the selected nutritional plan
+        user.logProgress("Nutrition Plan ID: " + nutritionPlanId + ", Food Item: " + foodItem, caloriesConsumed);
+        System.out.println("Nutritional progress logged successfully.");
+    }
+
+
 
 
     public static void viewProfile(User user) {
@@ -188,15 +213,32 @@ public class Main {
         System.out.println("Profile updated successfully.");
     }
 
-    public static void logProgress(Scanner scanner, User user) {
-        System.out.println("\nLog Progress:");
-        System.out.print("Enter activity name: ");
-        String activity = scanner.next();
-        System.out.print("Enter calories burned: ");
+    public static void logWorkoutProgress(Scanner scanner, User user, Admin admin) {
+        // Display all workout plans from Admin
+        System.out.println("\nAvailable Workout Plans:");
+        if (admin.getWorkoutPlans().isEmpty()) {
+            System.out.println("No workout plans available.");
+            return;
+        }
+        for (WorkoutPlan workoutPlan : admin.getWorkoutPlans()) {
+            workoutPlan.displayPlan();
+        }
+
+        // Log the workout progress
+        System.out.println("\nLog Workout Progress:");
+        System.out.print("Enter the Workout Plan ID you followed: ");
+        scanner.nextLine();
+        String workoutPlanId = scanner.nextLine();
+        System.out.print("Enter the name of the specific exercise performed: ");
+        String exercise = scanner.nextLine();
+        System.out.print("Enter the calories burned: ");
         double caloriesBurned = scanner.nextDouble();
-        user.logProgress(activity, caloriesBurned);
-        System.out.println("Progress logged successfully.");
+
+        // Log the progress for the selected workout plan
+        user.logProgress("Workout Plan ID: " + workoutPlanId + ", Exercise: " + exercise, caloriesBurned);
+        System.out.println("Workout progress logged successfully.");
     }
+
 
     public static void viewProgress(Scanner sc, User user) {
         System.out.println("\nYour Progress:");
