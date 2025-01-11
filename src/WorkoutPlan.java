@@ -1,14 +1,15 @@
 import java.util.List;
 
 public class WorkoutPlan {
-    private int id;
     private List<String> exercises;
     private String goal;
     private int duration; // Duration in weeks
     private WorkoutPlanStrategy strategy;
+    private static int counter = 0;
+    private int id;;
 
-    public WorkoutPlan(int id, List<String> exercises, String goal, int duration) {
-        this.id = id;
+    public WorkoutPlan(List<String> exercises, String goal, int duration) {
+        this.id = ++counter;
         this.exercises = exercises;
         this.goal = goal;
         this.duration = duration;
@@ -50,8 +51,7 @@ public class WorkoutPlan {
         System.out.println("---------------------------------------------------------------------------");
     }
 
-
-    public int getId() {
+    public  int getId() {
         return id;
     }
 

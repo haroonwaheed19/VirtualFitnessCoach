@@ -3,12 +3,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class Admin {
+public class Admin implements Subject{
     private static Admin instance;
     private String id;
     private String name;
     private String email;
-
+    private String planName;
     private List<User> users;
     private List<Exercise> exercises;
     private List<WorkoutPlan> workoutPlans;
@@ -94,16 +94,41 @@ public class Admin {
         return null;
     }
 
-    // User Management
-    public void addUser(User user) {
-        users.add(user);
-        System.out.println("User added: " + user.getName());
+    @Override
+    public void addObserver(Observer o) {
+        if (!observers.contains(o)) {
+            observers.add(o);
+        }
     }
 
-    public void removeUser(String userId) {
-        users.removeIf(user -> user.getId().equals(userId));
-        System.out.println("User removed with ID: " + userId);
+    @Override
+    public void removeObserver(Observer o) {
+        observers.remove(o);
     }
+    @Override
+    public void notifyObservers(String message) {
+        for (Observer observer : observers) {
+            observer.update(message);
+        }
+    }
+
+    // User Management
+    public void addUser(User user) {
+        if (!users.contains(user)) {  // Prevent duplicate users
+            users.add(user);
+            addObserver(user);
+            System.out.println("User added: " + user.getName());
+        } else {
+            System.out.println("User with this ID already exists.");
+        }
+    }
+
+    public void removeUser(User user) {
+        users.remove(user);
+        removeObserver(user);
+        System.out.println("User removed with ID: " + user.getId());
+    }
+
 
     public void updateUser(String userId, String name, String email, String password, String fitnessGoal, int age, double weight, double height) {
         for (User user : users) {
@@ -126,21 +151,20 @@ public class Admin {
         }
     }
 
-    // In Admin class
+
+    // Exercise Management
     public void addExercise(Exercise exercise) {
-        // Check if the exercise already exists (based on the exercise name or ID)
-        for (Exercise e : exercises) {
-            if (e.getId() == exercise.getId()) {
-                System.out.println("Duplicate exercise not allowed: " + exercise.getName());
-                return;  // Avoid adding duplicate exercise
-            }
+        if (exercises.stream().noneMatch(e -> e.getId() == exercise.getId())) {  // Prevent duplicate exercises
+            exercises.add(exercise);
+            notifyObservers("Exercise added: " + exercise.getName());
+        } else {
+            System.out.println("Duplicate exercise not allowed: " + exercise.getName());
         }
-        exercises.add(exercise);
-        System.out.println("Exercise added: " + exercise.getName());
     }
 
 
     public void removeExercise(int exerciseId) {
+        notifyObservers("Exercise removed: ID " + exerciseId);
         exercises.removeIf(exercise -> exercise.getId() == exerciseId);
     }
 
@@ -150,6 +174,7 @@ public class Admin {
                 exercise.setName(name);
                 exercise.setCaloriesBurnedPerMinute(caloriesBurnedPerMinute);
                 exercise.setEquipmentRequired(equipmentRequired);
+                notifyObservers("Exercise updated: ID " + exerciseId);
                 break;
             }
         }
@@ -164,16 +189,20 @@ public class Admin {
     // Workout Plan management
     public void addWorkoutPlan(WorkoutPlan workoutPlan) {
         workoutPlans.add(workoutPlan);
+        notifyObservers("WorkoutPlan Added :id  " + workoutPlan.getId());
     }
 
     public void removeWorkoutPlan(int planId) {
         workoutPlans.removeIf(workoutPlan -> workoutPlan.getId() == planId);
+        notifyObservers("WorkoutPlan removed :id  " + planId);
+
     }
 
     public void updateWorkoutPlan(int planId, List<String> exercises, String goal, int duration) {
         for (WorkoutPlan plan : workoutPlans) {
             if (plan.getId() == planId) {
                 plan.setExercises(exercises);
+                notifyObservers("WorkoutPlan updated :id  " + planId);
                 plan.displayPlan();
                 break;
             }
@@ -187,47 +216,45 @@ public class Admin {
     }
 
 
+    private Meal createMeal(String type, int id, String name, List<String> ingredients, int calories) {
+        return MealFactory.createMeal(type, id, name, ingredients, calories);
+    }
+
     public void addNutritionPlan(NutritionPlan nutritionPlan) {
-        Meal ketoMeal = MealFactory.createMeal("keto", 1, "Keto Salad", Arrays.asList("Avocado", "Cheese", "Lettuce"), 400);
-        Meal veganMeal = MealFactory.createMeal("vegan", 2, "Vegan Buddha Bowl", Arrays.asList("Quinoa", "Tofu", "Veggies"), 350);
-        Meal vegetarianMeal = MealFactory.createMeal("vegetarian", 3, "Vegetarian Pasta", Arrays.asList("Pasta", "Tomatoes", "Basil"), 500);
-        Meal balancedMeal = MealFactory.createMeal("balanced", 4, "Balanced Meal", Arrays.asList("Chicken", "Brown Rice", "Broccoli"), 600);
-
-        if (nutritionPlan.getDietType().equalsIgnoreCase("keto")) {
-            nutritionPlan.addMeals(Arrays.asList(ketoMeal));
-        } else if (nutritionPlan.getDietType().equalsIgnoreCase("vegan")) {
-            nutritionPlan.addMeals(Arrays.asList(veganMeal));
-        } else if (nutritionPlan.getDietType().equalsIgnoreCase("vegetarian")) {
-            nutritionPlan.addMeals(Arrays.asList(vegetarianMeal));
-        } else if (nutritionPlan.getDietType().equalsIgnoreCase("balanced")) {
-            nutritionPlan.addMeals(Arrays.asList(balancedMeal));
-        } else {
-            System.out.println("No matching diet type found for the Nutrition Plan.");
-        }
-        nutritionPlans.add(nutritionPlan);
-    }
-
-    public void removeNutritionPlan(int id) {
-        NutritionPlan planToRemove = null;
-        for (NutritionPlan plan : nutritionPlans) {
-            if (plan.getId() == id) {
-                planToRemove = plan;
+        List<Meal> meals = new ArrayList<>();
+        switch (nutritionPlan.getDietType().toLowerCase()) {
+            case "keto":
+                planName = "keto";
+                meals.add(createMeal("keto", 1, "Keto Salad", Arrays.asList("Avocado", "Cheese", "Lettuce"), 400));
                 break;
-            }
+            case "vegan":
+                planName = "vegan";
+                meals.add(createMeal("vegan", 2, "Vegan Buddha Bowl", Arrays.asList("Quinoa", "Tofu", "Veggies"), 350));
+                break;
+            case "vegetarian":
+                planName = "vegetarian";
+                meals.add(createMeal("vegetarian", 3, "Vegetarian Pasta", Arrays.asList("Pasta", "Tomatoes", "Basil"), 500));
+                break;
+            case "balanced":
+                planName = "balanced";
+                meals.add(createMeal("balanced", 4, "Balanced Meal", Arrays.asList("Chicken", "Brown Rice", "Broccoli"), 600));
+                break;
+            default:
+                System.out.println("No matching diet type found for the Nutrition Plan.");
+                return;
         }
-        if (planToRemove != null) {
-            nutritionPlans.remove(planToRemove);
-            System.out.println("Nutrition plan removed successfully.");
-        } else {
-            System.out.println("Nutrition plan not found.");
-        }
+        nutritionPlan.addMeals(meals);
+        nutritionPlans.add(nutritionPlan);
+        notifyObservers("Nutrition Plan : " + planName + " Added");
     }
+
+
 
     public void updateNutritionPlan(int id, double newCalories) {
         for (NutritionPlan plan : nutritionPlans) {
             if (plan.getId() == id) {
                 plan.updatePlan(newCalories);
-                System.out.println("Nutrition plan updated successfully.");
+                notifyObservers("Nutrition plan id: " + id  + "  updated successfully.");
                 return;
             }
         }
@@ -244,5 +271,20 @@ public class Admin {
         }
     }
 
+    public void removeNutritionPlan(int id) {
+        NutritionPlan planToRemove = null;
+        for (NutritionPlan plan : nutritionPlans) {
+            if (plan.getId() == id) {
+                planToRemove = plan;
+                break;
+            }
+        }
+        if (planToRemove != null) {
+            nutritionPlans.remove(planToRemove);
+            notifyObservers("Nutrition plan id : " + id +" removed successfully.");
+        } else {
+            System.out.println("Nutrition plan not found.");
+        }
+    }
 }
 

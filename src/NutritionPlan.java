@@ -16,9 +16,12 @@ public class NutritionPlan {
         this.meals = new ArrayList<>();
     }
 
-    // Add a method to associate meals with this nutrition plan
     public void addMeals(List<Meal> meals) {
-        this.meals = meals;
+        for (Meal meal : meals) {
+            if (!this.meals.contains(meal)) {
+                this.meals.add(meal);
+            }
+        }
     }
 
     public String getDietType() {

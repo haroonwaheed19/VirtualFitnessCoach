@@ -12,6 +12,9 @@ public class Main {
         admin.addUser(u1);
         admin.addUser(u2);
         admin.addUser(u3);
+        admin.addObserver(u1);
+        admin.addObserver(u2);
+        admin.addObserver(u3);
 
         // Adding Exercises
         Exercise running = ExerciseFactory.createExercise("cardio", 1, "Running", 8.5, false);
@@ -23,16 +26,16 @@ public class Main {
         admin.addExercise(swimming);
         admin.addExercise(running); // Duplicate upload
 
-        WorkoutPlan weightLossPlan = new WorkoutPlan(1, Arrays.asList("Running", "Cycling", "Swimming"), "Weight Loss", 8);
+        WorkoutPlan weightLossPlan = new WorkoutPlan( Arrays.asList("Running", "Cycling", "Swimming"), "Weight Loss", 8);
         weightLossPlan.setStrategy(new WeightLossStrategy());
 
-        WorkoutPlan muscleGainPlan = new WorkoutPlan(2, Arrays.asList("Weight Lifting", "Push-Ups", "Plank"), "Muscle Gain", 12);
+        WorkoutPlan muscleGainPlan = new WorkoutPlan(Arrays.asList("Weight Lifting", "Push-Ups", "Plank"), "Muscle Gain", 12);
         muscleGainPlan.setStrategy(new MuscleGainStrategy());
 
-        WorkoutPlan generalFitnessPlan = new WorkoutPlan(3, Arrays.asList("Walking", "Yoga", "Stretching"), "General Fitness", 10);
+        WorkoutPlan generalFitnessPlan = new WorkoutPlan(Arrays.asList("Walking", "Yoga", "Stretching"), "General Fitness", 10);
         generalFitnessPlan.setStrategy(new GeneralFitnessStrategy());
 
-        WorkoutPlan advancedFitnessPlan = new WorkoutPlan(4, Arrays.asList("HIIT", "Deadlift", "Pull-Ups"), "Advanced Fitness", 14);
+        WorkoutPlan advancedFitnessPlan = new WorkoutPlan(Arrays.asList("HIIT", "Deadlift", "Pull-Ups"), "Advanced Fitness", 14);
         advancedFitnessPlan.setStrategy(new GeneralFitnessStrategy());
 
         admin.addWorkoutPlan(weightLossPlan);
@@ -292,6 +295,7 @@ public class Main {
 
         int choice = scanner.nextInt();
         scanner.nextLine(); // Consume newline character
+        User user = null;
 
         switch (choice) {
             case 1: // Add User
@@ -311,13 +315,11 @@ public class Main {
                 double weight = scanner.nextDouble();
                 System.out.println("Enter Height (m):");
                 double height = scanner.nextDouble();
-                User user = new User(userId, name, email, password, fitnessGoal, age, weight, height);
+                user = new User(userId, name, email, password, fitnessGoal, age, weight, height);
                 admin.addUser(user);
                 break;
             case 2: // Remove User
-                System.out.println("Enter User ID to Remove:");
-                String removeUserId = scanner.nextLine();
-                admin.removeUser(removeUserId);
+                admin.removeUser(user);
                 break;
             case 3: // Update User
                 System.out.println("Enter User ID to Update:");
@@ -429,9 +431,6 @@ public class Main {
 
         switch (choice) {
             case 1: // Add Workout Plan
-                System.out.print("Enter workout plan ID: ");
-                int planId = scanner.nextInt();
-                scanner.nextLine(); // Consume newline
                 System.out.print("Enter goal for the workout plan: ");
                 String goal = scanner.nextLine();
                 System.out.print("Enter the duration: ");
@@ -442,7 +441,7 @@ public class Main {
                 String exercisesInput = scanner.nextLine();
                 String[] exercisesArray = exercisesInput.split(",");
                 Collections.addAll(exercisesList, exercisesArray);
-                WorkoutPlan workoutPlan = new WorkoutPlan(planId, exercisesList, goal, duration);
+                WorkoutPlan workoutPlan = new WorkoutPlan(exercisesList, goal, duration);
                 admin.addWorkoutPlan(workoutPlan);
                 break;
             case 2: // Remove Workout Plan

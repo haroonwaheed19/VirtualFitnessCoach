@@ -1,8 +1,8 @@
 import java.util.*;
 import java.util.ArrayList;
 
-public class User {
-    private String id, name, email, password, fitnessGoal;
+public class User implements Observer {
+    private String  id,name, email, password, fitnessGoal;
     private int age;
     private double weight, height;
     private List<String> progress = new ArrayList<>();
@@ -139,4 +139,8 @@ public class User {
         return "Name : " + name + " Id : " + id + " Fitness Goal : " + fitnessGoal + " Age : " + age + " Height : " + height + " ft Weight : " + weight + " Kg";
     }
 
+    @Override
+    public void update(String message) {
+        System.out.println("Notification: " + message);
+    }
 }
